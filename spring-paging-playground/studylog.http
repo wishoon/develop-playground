@@ -1,0 +1,5 @@
+### Pageable Page Get 요청
+GET http://localhost:8080/api/studyLogs/page?size=10&page=0
+
+### Pageable Slice Get 요청
+GET http://localhost:8080/api/studyLogs/slice?size=10&page=0
