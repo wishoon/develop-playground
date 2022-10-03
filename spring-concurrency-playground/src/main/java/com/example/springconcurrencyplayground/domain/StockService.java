@@ -28,9 +28,20 @@ public class StockService {
      */
     @Transactional
     public void decreaseOfDatabase(final Long id, final Long quantity) {
-        stockRepository.updateStockById(id);
+        stockRepository.updateStockById(id, quantity);
     }
 
+    /**
+     * Stock을 DataBase Level과 synchronized를 사용해서 처리
+     */
+    @Transactional
+    public synchronized void synchronizedDecreaseOfDatabase(final Long id, final Long quantity) {
+        stockRepository.updateStockById(id, quantity);
+    }
+
+    /**
+     * Stock을 synchronized를 사용해서 처리
+     */
     public synchronized void synchronizedDecrease(final Long id, final Long quantity) {
         Stock stock = stockRepository.findById(id).orElseThrow();
         stock.decrease(quantity);

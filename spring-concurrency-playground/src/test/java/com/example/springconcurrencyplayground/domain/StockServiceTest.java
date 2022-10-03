@@ -36,7 +36,6 @@ class StockServiceTest {
         stockService.decreaseOfApplication(1L, 1L);
 
         Stock stock = stockRepository.findById(1L).orElseThrow();
-
         assertThat(99L).isEqualTo(stock.getQuantity());
     }
 
@@ -61,11 +60,9 @@ class StockServiceTest {
                 }
             });
         }
-
         countDownLatch.await();
 
         Stock stock = stockRepository.findById(1L).orElseThrow();
-
         assertThat(0L).isEqualTo(stock.getQuantity());
     }
 
@@ -85,16 +82,36 @@ class StockServiceTest {
                 }
             });
         }
-
         countDownLatch.await();
 
         Stock stock = stockRepository.findById(1L).orElseThrow();
-
         assertThat(0L).isEqualTo(stock.getQuantity());
     }
 
     @Test
-    void synchonized를_사용해서_동시에_100개의_요청으로_재고_감소() throws InterruptedException {
+    void 동시에_100개의_요청으로_재고_감소를_synchonized와_인프라_레벨에서_처리() throws InterruptedException {
+        int threadCount = 100;
+
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        CountDownLatch countDownLatch = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < threadCount; i++) {
+            executorService.submit(() -> {
+                try {
+                    stockService.synchronizedDecreaseOfDatabase(1L, 1L);
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+
+        Stock stock = stockRepository.findById(1L).orElseThrow();
+        assertThat(0L).isEqualTo(stock.getQuantity());
+    }
+
+    @Test
+    void 동시에_100개의_요청으로_재고_감소를_synchonized를_사용해서_처리() throws InterruptedException {
         int threadCount = 100;
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
@@ -109,11 +126,9 @@ class StockServiceTest {
                 }
             });
         }
-
         countDownLatch.await();
 
         Stock stock = stockRepository.findById(1L).orElseThrow();
-
         assertThat(stock.getQuantity()).isEqualTo(0L);
     }
 }
