@@ -13,7 +13,20 @@ spring:
 logging:
   level:
     org:
+      # 트랜잭션 프록시가 호출하는 트랜잭션 시작과 종료를 로그로 출력
+      springframework:
+        transaction:
+          interceptor: TRACE
+        jdbc:
+          datasource:
+            DataSourceTransactionManager: DEBUG
+        orm:
+          jpa:
+            JpaTransactionManager: DEBUG
+      # hibernate가 실행하는 모든 로그를 출력
       hibernate:
+        resource:
+          transaction: DEBUG
         SQL: DEBUG
         type:
           descriptor:

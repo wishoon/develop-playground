@@ -1,4 +1,4 @@
-package com.example.springconcurrencyplayground.domain;
+package com.example.springconcurrencyplayground.concurrency;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

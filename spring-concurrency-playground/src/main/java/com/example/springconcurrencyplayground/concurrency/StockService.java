@@ -1,4 +1,4 @@
-package com.example.springconcurrencyplayground.domain;
+package com.example.springconcurrencyplayground.concurrency;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +40,7 @@ public class StockService {
     }
 
     /**
-     * Stock을 synchronized를 사용해서 처리
+     * Stock을 synchronized를 사용해서 처리?
      */
     public synchronized void synchronizedDecrease(final Long id, final Long quantity) {
         Stock stock = stockRepository.findById(id).orElseThrow();
